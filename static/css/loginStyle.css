@@ -1,0 +1,110 @@
+body{
+	background-image: url("../icons/fac-bg.jpg");
+	/*background-repeat: repeat-y;*/
+    /*background-size: cover;*/
+}
+
+.containeur{
+	width: 450px;
+	height: 470px;
+	text-align: center;
+	position: absolute;
+	top: 12%;
+	left: 30%;
+	background-color: rgb(73, 77, 134);
+	border-radius: 25px 80px;
+	box-shadow: 1px 2px 7px black;
+}
+
+.loginTitle{
+	margin-top: -2px;
+	margin-right: -2px;
+	margin-bottom: 20px;
+	display: flex;	
+	justify-content: right;
+}
+
+.loginTitle h3{
+	margin-top: 10%;
+	color: white;
+	font-size: 2em;
+	font-weight: bold;
+}
+
+.fingerRounded{
+	margin-left: 12%;
+}
+
+.fingerRounded, .faceRounded{
+	width: 130px;
+	width: 130px;
+	background-color: #f6fafd;
+	border-radius: 50%;
+}
+
+.nomsAuth{
+	margin: 0 65px;
+}
+
+.nomsAuth a{
+	text-decoration: none;
+	color: rgb(135, 136, 155);
+	font-size: .8em;
+	float: right;
+}
+
+.nomsAuth a:hover{
+	color: rgb(222, 223, 237);
+	font-weight: 550;
+	text-decoration: none;
+}
+
+.nomsAuth input{
+	border: 0px;
+	border-bottom: 1px solid #6d727486;
+	background: transparent;
+	color: #cccecf;
+	font-size: 1.2em;
+	margin-top: 23px;
+	margin-bottom: 15px;
+	border-radius: 0;
+
+}
+
+.nomsAuth input:focus{
+	border: none;
+	background: transparent;
+	border-bottom: 1px solid #6d727486;
+	color: #cccecf;
+	text-align: center;
+}
+
+.loginButton{
+	margin-top: 82px;
+	margin-left: -2px;
+	display: flex;
+}
+
+.loginButton{
+	color: white;
+}
+
+.positionBtn{
+	text-decoration: none;
+	margin-left: 6%;
+	width: 120px;
+	height: 40px;
+	border-radius: 25px;
+	font-size: 1.5em;
+	background: #4e8d68;
+	color: white;
+	border-style: none;
+	/*padding-bottom: 8px;*/
+}
+
+.positionBtn:hover{
+	text-decoration: none;
+	color: white;
+	transform: scale(1.02);
+    transition:  .3s;
+}

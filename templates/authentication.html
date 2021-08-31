@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>Login_Face_Recogn</title>
+		<meta charset="utf-8">
+		<meta name="memoire" content="ceci est une maquette de mon projet de memoire">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="{{url_for('static',filename='css/loginStyle.css')}}">
+		<link rel="stylesheet" href="../static/css/bootstrap/bootstrap.min.css">
+	</head>
+
+	<body>
+			<div class="containeur">
+				<div class="loginTitle">
+					<h3>Login</h3>
+					<img src="../static/icons/finge.png" class="fingerRounded">
+				</div>
+
+				<div class="nomsAuth">
+					<div class="form-group">
+						<input type="text" name="username" placeholder="Username" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<input type="password" name="password" placeholder="Password" class="form-control" required>
+					</div>
+						<a href="" class="resetPsw">forgotten password ?</a>
+				</div>
+					
+				<div class="loginButton">
+					<img src="../static/icons/face1.png" class="faceRounded">
+					<a href="http://127.0.0.1:5000/index" class="positionBtn" name="submit" type="submit" value="Sauvegarder" required>Log-in </a>
+				</div>
+			</div>
+	</body>
+
+</html>

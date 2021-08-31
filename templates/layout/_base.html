@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>student_Authent</title>
+		<meta charset="utf-8">
+		<meta name="memoire" content="ceci est une maquette de mon projet de memoire">
+		<!-- <link rel="stylesheet" type="text/css" href="css/indexStyle.css"> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="{{url_for('static',filename='css/indexStyle.css')}}">
+
+		<script src="../static/css/bootstrap/bootstrap-jquery.min.js"></script>
+		<script src="../static/css/bootstrap/bootstrap.min.js"></script>
+
+		<link rel="stylesheet" href="../static/css/bootstrap/bootstrap.min.css">
+
+		<script type="text/javascript">
+			function displayImage(){
+				if(this.files && this.files[0]){
+					var obj = new FileReader();
+					obj.onload = function(data){
+						var image = document.getElementById('file');
+						image.src = data.target.result;
+						image.style.display = "block";
+					}
+					obj.readAsDataURL(this.files[0]);
+				}
+			}
+		</script>
+	</head>
+
+	<!-- End of head part
+		================== -->
+		
+	<body>
+
+		{% include 'layout/_navBtn.html' %}
+
+		{% block body %}
+
+        {% endblock %}
+
+    </body>
+</html>

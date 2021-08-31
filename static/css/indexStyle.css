@@ -1,0 +1,339 @@
+
+/* CSS for the right buttons menu *
+ *========================= ======*/
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+	display: flex;
+	flex-direction: row;
+}
+
+.leftNav{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+	width: 14%;
+	height: 625px;					/* je dois gerer la hauteur de facon automatique */
+	background-color: #b4b4b4;
+}
+
+.navBtn{
+	border-top-left-radius: 50px;
+	border-bottom-left-radius: 50px;
+	background: #e7eaec;
+	color: black;
+	font-size: 1.2em;
+	margin: 0px 0px 35px 10px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	text-align: center;
+}
+
+.navBtn:hover{
+    text-decoration: none;
+    color: #8c5dad;
+    border-right: 5px solid #8c5dad;
+	transform: scale(1.025);
+	transition:  .3s;
+}
+
+.navBtn:last-child{
+	background: #c56666;
+	margin-bottom: 70px;
+	margin-top: 50px;
+}
+
+.navBtn:last-child:hover{
+	color: #a49a9a;
+}
+
+ /*	CSS for welcome page * 
+  *======================*/
+
+.principalNav{
+	display: flex;
+	flex-direction: row;
+	background-image: url("../icons/fac-bg.jpg");
+	background-size: cover;
+}
+
+.principalLeft{
+	height: 625px;					/* je dois gerer la hauteur de facon automatique */
+	width: 600px;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	text-align: center;
+	border: none;
+}
+
+.principalRight{
+	background-image: url("../icons/control2.png");
+	background-position: right;
+	background-size: cover;
+	/*background: #d0c1d1;*/
+	height: 625px;					/* je dois gerer la hauteur de facon automatique */
+	width: 575px;
+	border-top-left-radius: 250px;
+	border-bottom-left-radius: 250px;
+}
+
+.principalBtn{
+	margin:45px 180px;
+	margin-bottom: 20px;
+	background: #684384;	
+	color: white;
+	font-size: 1.3em;
+	border-radius: 10px;
+	padding:6px;
+}
+
+.principalBtn:last-child{
+	background: #3c6653;
+}
+
+.principalBtn:hover{
+    text-decoration: none;
+    color: #a49a9a;
+}
+
+.titreHome{
+	border-radius: 25px;
+	background: #e4e4e4;
+	font-size: 1.5em;
+	padding: 6px 0px;
+	margin: 40px 0px 120px 75px;
+}
+
+/*	CSS for student's info part * 
+ *==============================*/
+
+.principalNav2{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-image: url("../icons/fac-bg.jpg");
+	background-size: cover;
+	align-content: center;
+	text-align: center;
+}
+
+.titlePage{
+	border-radius: 25px;
+	background: #e4e4e4;
+	font-size: 1.3em;
+	padding: 5px 0px;
+	margin: 25px 200px;
+}
+
+.registerInfo{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+.registerBtn{
+	background: #684384;
+	height: 40px;
+	margin-right: 250px;	
+	color: white;
+	font-size: 1.2em;
+	padding:1px 15px;
+	border: none;
+	border-radius: 20px;
+}
+
+.recherche input{
+	width: 300px;
+	border: none;
+	border-radius: 0;
+	border-bottom: 1px solid #6d727486;
+	background: transparent;
+	color: #6a568b;
+}
+
+/*.registerBtn:last-child{
+	background: #3c6653;
+	border-radius: 0px 20px 20px 0px;
+}*/
+
+.registerBtn:hover{
+    text-decoration: none;
+    color: white;
+    transform: scale(1.025);
+    transition:  .2s;
+}
+
+.registering{
+	display: flex;
+	flex-direction: row;
+	width: 500px;
+}
+
+.selectPhoto{
+	width: 160px;
+}
+
+.parcourirform input{
+	width: 160px;
+}
+
+.modalInfo, .modal{
+	width: 500px;
+	margin-right: 30px;
+}
+
+.studentCam{
+	background-image: url("../icons/control1.png");
+	height: 150px;
+    width: 150px;
+	margin-bottom: 10px;
+}
+
+.tablemodify{
+	margin: 0 25px;
+}
+
+/* CSS for Attendance part  *
+ *========================= */
+.attendancePictures{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+    margin-top: 50px;
+}
+
+.principalNav2 p{
+	margin-top:10px;
+	font-size: 1.3em;
+	font-weight: bold;
+	margin-left: -300px
+}
+
+.centerCard{
+    background-position: center;
+    background-size: contain;
+    border-radius: 15px;
+}
+
+.studentPic{
+	background-image: url("../icons/control1.png");
+	height: 200px;
+    width: 200px;
+	margin-right: 200px;
+}
+
+.fingerPic{
+	background-image: url("../icons/fingerprint.png");
+	height: 120px;
+    width: 120px;
+    margin-top: 60px;
+}
+
+.endBtn{
+	background: #c56666;
+	margin-top: 70px;
+	margin-left: 500px;
+	width: 150px;
+	color: black;
+	border-radius: 25px;
+	padding: 5px 0;
+}
+
+.endBtn:hover{
+	color: white;
+	text-decoration: none;
+	transform: scale(1.025);
+    transition:  .3s;
+}
+
+/* CSS for Recognition part one*
+ *=============================*/
+.noticeRecogn{
+	margin-top: 50px;
+	margin-bottom: 20px;
+	color: gray;
+	font-size: 1.2em;
+}
+
+.recogOneInfo{
+	margin: 0 450px;
+}
+
+.recogOneInfo input{
+	border: none;
+	border-radius: 0;
+	border-bottom: 1px solid #6d727486;
+	background: transparent;
+	color: #6a568b;
+	margin-top: 25px;
+	font-size: 1.1em;
+	text-align: center;
+}
+
+.recogOneInfo input:focus{
+	border: none;
+	background: transparent;
+	border-bottom: 1px solid #6d727486;
+	color: #000;
+	text-align: center;
+}
+
+.startBtn{
+	margin: 70px 510px 0;
+	background: #745b9d;	
+	color: white;
+	font-size: 1.2em;
+	border-radius: 25px;
+	padding:6px 0;
+}
+
+.startBtn:hover{
+	text-decoration: none;
+	transform: scale(1.015);
+    transition: .3s;
+    color: white;
+}
+/* CSS for Recognition part too*
+ *=============================*/
+
+ .StreamPart{
+    margin-top: 20px;
+ }
+
+.stpc{
+	margin-right: 100px;
+	margin-top: 100px;
+}
+
+.fpc{
+	background-image: url("../icons/face1.png");
+    margin-top: 150px;
+}
+
+.streaming{
+	/*background-image: url("../img/control2.png");*/
+	background: #444444;
+	height: 350px;
+    width: 450px;
+	margin-right: 70px;
+}
+
+.photoName{
+	display: flex;
+	flex-direction: column;
+}
+
+.photoName p{
+	margin-left: -180px;
+}
+
+ .nameStudent{
+	margin-top:10px;
+	font-size: 1.5em;
+	font-weight: 700;
+}

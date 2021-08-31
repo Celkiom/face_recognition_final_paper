@@ -1,0 +1,19 @@
+{% extends 'layout/_base.html' %}
+
+	{% block body %}
+
+		<div class="principalNav2">
+			<label class="titlePage">Recognition</label>
+			<div class="attendancePictures StreamPart">
+				<dir class="photoName">
+					<img src="data:image/jpeg;base64, {{image_web }}" alt="", class="centerCard studentPic stpc">
+					<p class="nameStudent">Alain walker</p>
+				</dir>
+				
+				<img src="data:image/jpeg;base64, {{ image_web }}" alt="", class="centerCard streaming">
+				<img src="data:image/jpeg;base64, {{ image_web }}" alt="", class="centerCard fingerPic fpc">
+			</div>
+			<a href="http://127.0.0.1:5000/index" class="endBtn">End recognition</a>
+		</div>
+
+	{% endblock %}

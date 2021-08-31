@@ -1,0 +1,19 @@
+{% extends 'layout/_base.html' %}
+
+	{% block body %}
+
+		<div class="principalNav2">
+			<label class="titlePage">Recognition</label>
+			<div class="noticeRecogn">
+				<label>please enter the supervisor fullname and the date of</label><br>
+				<label>the day before you start recognition</label>
+			</div>
+			<div class="recogOneInfo">
+				<input type="text" name="supervisor" placeholder="Supervisor's full name" class="form-control" required>
+				<input type="date" name="dateActivity" placeholder="Today's date" class="form-control" required>
+			</div>
+				<a href="http://127.0.0.1:5000/streaming" class="startBtn" >Start recognition</a>
+			
+		</div>
+
+	{% endblock %}
