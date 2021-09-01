@@ -12,13 +12,12 @@ path = './images'
 def studentInformation():
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
     mycursor = conn.cursor()
-    cmd = "SELECT matriculeEtudiant, nomsEtudiant, genreEtudiant, faceEtudiant, faculte.designation_fac, " \
-          "departement.designation_departem, promotion.designation_prom, appartenir.annee_academ, finance.solde, " \
-          "workprogram.seance FROM student JOIN appartenir ON student.matriculeEtudiant = appartenir.matricule_fk" \
-          " JOIN promotion ON appartenir.id_promotion_fk = promotion.id_promotion JOIN departement ON" \
-          " promotion.departement_fk = departement.id_departement JOIN faculte ON " \
-          "departement.faculte_fk = faculte.id_fac JOIN finance ON student.matriculeEtudiant = finance.matricule_fk " \
-          "JOIN workprogram ON student.matriculeEtudiant = workprogram.matricule_fk"
+    cmd = "SELECT matricule, noms, genre, photo, faculte.designation_fac, departement.designation_dep, " \
+          "promotion.designation_prom, appartenir.annee_academ, finance.solde, workprogram.seance FROM student JOIN " \
+          "appartenir ON student.matricule = appartenir.matricule_fk  JOIN promotion ON appartenir.promotion_fk = " \
+          "promotion.id_prom JOIN departement ON  promotion.departement_fk = departement.id_dep JOIN faculte ON " \
+          "departement.faculte_fk = faculte.id_fac JOIN finance ON student.matricule = finance.matricule_fk JOIN " \
+          "workprogram ON student.matricule = workprogram.matricule_fk "
     mycursor.execute(cmd)
     student = mycursor.fetchall()
     return student
@@ -27,14 +26,13 @@ def studentInformation():
 def paginationInfo(lim, offs):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
     mycursor = conn.cursor()
-    mycursor.execute("SELECT matriculeEtudiant, nomsEtudiant, genreEtudiant, faceEtudiant, faculte.designation_fac, "
-                     "departement.designation_departem, promotion.designation_prom, appartenir.annee_academ, "
-                     "finance.solde, workprogram.seance FROM student JOIN appartenir ON student.matriculeEtudiant = "
-                     "appartenir.matricule_fk JOIN promotion ON appartenir.id_promotion_fk = promotion.id_promotion "
-                     "JOIN departement ON promotion.departement_fk = departement.id_departement JOIN faculte ON "
-                     "departement.faculte_fk = faculte.id_fac JOIN finance ON student.matriculeEtudiant = "
-                     "finance.matricule_fk JOIN workprogram ON student.matriculeEtudiant = workprogram.matricule_fk "
-                     "LIMIT %s OFFSET %s", (lim, offs))
+    mycursor.execute("SELECT matricule, noms, genre, photo, faculte.designation_fac, departement.designation_dep, " \
+                     "promotion.designation_prom, appartenir.annee_academ, finance.solde, workprogram.seance FROM "
+                     "student JOIN appartenir ON student.matricule = appartenir.matricule_fk  JOIN promotion ON "
+                     "appartenir.promotion_fk = promotion.id_prom JOIN departement ON  promotion.departement_fk = "
+                     "departement.id_dep JOIN faculte ON departement.faculte_fk = faculte.id_fac JOIN finance ON "
+                     "student.matricule = finance.matricule_fk JOIN workprogram ON student.matricule = "
+                     "workprogram.matricule_fk LIMIT %s OFFSET %s", (lim, offs))
     studentsList = mycursor.fetchall()
     mycursor.close()
     return studentsList
@@ -71,59 +69,158 @@ def findEncodings(images):
 def RegisterStudent(id, Name, Gender, Faculte, Departement, Promotion, Annee, file):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
     mycursor = conn.cursor()
-    if id != "" and Name != "" and Gender != "" and Faculte != "" and Departement != "" and Promotion != "" and Annee != "" and file != "":
-        try:
-            mycursor.execute("INSERT INTO student(student.matriculeEtudiant, student.nomsEtudiant, student.genreEtudiant, " \
-                       "student.faceEtudiant) VALUES(?,?,?, ?)",(id, Name, Gender, file))  # Execute the Commande 1
+    if id != "" and Name != "" and Gender != "" and file != "" and Faculte != "" and Departement != "" and Promotion != "":
+        cmd = "INSERT INTO student(matricule, noms, genre, photo) VALUES(%s, %s, %s, %s)"
+        values = (id, Name, Gender, file)
+        mycursor.execute(cmd, values)  # Execute the Commande 1
+        cmd1 = """INSERT INTO faculte(designation_fac) VALUES(%s)"""
+        value1 = (Faculte,)
+        mycursor.execute(cmd1, value1)  # Execute the Commande 1
+        cmd2 = """INSERT INTO finance(matricule_fk) VALUES(%s)"""
+        value2 = (id,)
+        mycursor.execute(cmd2, value2)  # Execute the Commande 1
 
-            mycursor.execute("INSERT INTO faculte(faculte.designation_fac) VALUES(?)", (Faculte, ))  # Execute the Commande 1
+        mycursor.execute("SELECT id_fac FROM faculte ORDER BY id_fac DESC LIMIT 1")
+        idFac = mycursor.fetchone()
+        cmd3 = """INSERT INTO departement(designation_dep, faculte_fk) VALUES(%s, %s)"""
+        values3 = (Departement, idFac[0])
+        mycursor.execute(cmd3, values3)  # Execute the Commande 1
 
-            mycursor.execute("INSERT INTO finance(finance.matricule_fk) VALUES(?)", (id,))  # Execute the Commande 1
+        mycursor.execute("SELECT id_dep FROM departement ORDER BY id_dep DESC LIMIT 1")
+        idDep = mycursor.fetchone()
+        cmd4 = """INSERT INTO promotion(designation_prom, departement_fk) VALUES(%s, %s)"""
+        values4 = (Promotion, idDep[0])
+        mycursor.execute(cmd4, values4)  # Execute the Commande 1
 
-            mycursor.execute("INSERT INTO departement(departement.designation_departem, departement.faculte_fk)" \
-                   "VALUES(?,?)", (Departement,"SELECT faculte.id_fac FROM faculte ORDER BY id_fac DESC LIMIT 1"))  # Execute the Commande 1
+        mycursor.execute("SELECT id_prom FROM promotion ORDER BY id_prom DESC LIMIT 1")
+        idProm = mycursor.fetchone()
+        cmd5 = """INSERT INTO appartenir(annee_academ, promotion_fk, matricule_fk) VALUES(%s, %s, %s)"""
+        values5 = (Annee, idProm[0], id)
+        mycursor.execute(cmd5, values5)  # Execute the Commande 1
 
-            mycursor.execute("INSERT INTO promotion(promotion.designation_prom, promotion.departement_fk) " \
-                   "VALUES(?, ?)",(Promotion,"SELECT departement.id_departement FROM departement ORDER BY id_departement DESC LIMIT 1")) # Execute the Commande 1
-
-            mycursor.execute("INSERT INTO appartenir(appartenir.annee_academ, appartenir.id_promotion_fk, appartenir.matricule_fk) " \
-                   "VALUES(?,?,?)", (Annee, "SELECT promotion.id_promotion FROM promotion ORDER BY id_promotion DESC LIMIT 1", id))  # Execute the Commande 1
-
-            mycursor.execute("INSERT INTO workprogram(workprogram.matricule_fk) VALUES(?)",(id,))  # Execute the Commande 1
-            conn.commit()
-
-            # mycursor.execute(cmd1, value1)  # Execute the Commande 1
-            # conn.commit()
-            # mycursor.execute(cmd2, value2)  # Execute the Commande 2
-            # conn.commit()
-            # mycursor.execute(cmd3, value3)  # Execute the Commande 3
-            # conn.commit()
-            # mycursor.execute(cmd4, value4)  # Execute the Commande 4
-            # conn.commit()
-            # mycursor.execute(cmd5, value5)  # Execute the Commande 5
-            # conn.commit()
-            # mycursor.execute(cmd6, value6)  # Execute the Commande 6
-            # conn.commit()
-            # mycursor.execute(cmd7, value7)  # Execute the Commande 7
-            # conn.commit()
-            print("Information registered successfully in database..!")
-        except:
-            print("Error..! can not add in database..!")
+        cmd6 = """INSERT INTO workprogram(matricule_fk) VALUES(%s)"""
+        values6 = (id,)
+        mycursor.execute(cmd6, values6)  # Execute the Commande 1
+        conn.commit()
+        print("Information registered successfully in database..!")
     else:
-        print("Information", "Please fill informations first...")
+        print("Information not filled", "Please fill informations first...")
         conn.rollback()
+
+# def RegisterStudent(id, Name, Gender, file):
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     if id != "" and Name != "" and Gender != "" and file != "":
+#         cmd = "INSERT INTO student(matricule, noms, genre, photo) VALUES(%s, %s, %s, %s)"
+#         values = (id, Name, Gender, file)
+#         mycursor.execute(cmd, values)  # Execute the Commande 1
+#         conn.commit()
+#         print("Information registered successfully in database..!")
+#     else:
+#         print("Information not filled", "Please fill informations first...")
+#         conn.rollback()
+
+
+# def RegisterFac(Faculte):
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     if Faculte != "":
+#         cmd = """INSERT INTO faculte(designation_fac) VALUES(%s)"""
+#         values = (Faculte,)
+#         mycursor.execute(cmd, values)  # Execute the Commande 1
+#         conn.commit()
+#         print("Information registered successfully in database..!")
+#     else:
+#         print("Information not filled", "Please fill informations first...")
+#         conn.rollback()
+#
+#
+# def RegisterFincance(id):
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     if id != "":
+#         cmd = """INSERT INTO finance(matricule_fk) VALUES(%s)"""
+#         values = (id,)
+#         mycursor.execute(cmd, values)  # Execute the Commande 1
+#         conn.commit()
+#         print("Information registered successfully in database..!")
+#     else:
+#         print("Information not filled", "Please fill informations first...")
+#         conn.rollback()
+#
+#
+# def RegisterDepartem(Departement):
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     if Departement != "":
+#         mycursor.execute("SELECT id_fac FROM faculte ORDER BY id_fac DESC LIMIT 1")
+#         idFac = mycursor.fetchone()
+#         cmd = """INSERT INTO departement(designation_dep, faculte_fk) VALUES(%s, %s)"""
+#         values = (Departement, idFac[0])
+#         mycursor.execute(cmd, values)  # Execute the Commande 1
+#         conn.commit()
+#         print("Information registered successfully in database..!")
+#     else:
+#         print("Information not filled", "Please fill informations first...")
+#         conn.rollback()
+#
+#
+# def RegisterProm(Promotion):
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     if Promotion != "":
+#         mycursor.execute("SELECT id_dep FROM departement ORDER BY id_dep DESC LIMIT 1")
+#         idDep = mycursor.fetchone()
+#         cmd = """INSERT INTO promotion(designation_prom, departement_fk) VALUES(%s, %s)"""
+#         values = (Promotion, idDep[0])
+#         mycursor.execute(cmd, values)  # Execute the Commande 1
+#         conn.commit()
+#         print("Information registered successfully in database..!")
+#     else:
+#         print("Information not filled", "Please fill informations first...")
+#         conn.rollback()
+#
+#
+# def RegisterAnnee(id, Annee):
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     if id != "" and Annee != "":
+#         mycursor.execute("SELECT id_prom FROM promotion ORDER BY id_prom DESC LIMIT 1")
+#         idProm = mycursor.fetchone()
+#         cmd = """INSERT INTO appartenir(annee_academ, promotion_fk, matricule_fk) VALUES(%s, %s, %s)"""
+#         values = (Annee, idProm[0], id)
+#         mycursor.execute(cmd, values)  # Execute the Commande 1
+#         conn.commit()
+#         print("Information registered successfully in database..!")
+#     else:
+#         print("Information not filled", "Please fill informations first...")
+#         conn.rollback()
+#
+#
+# def RegisterWps(id):
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     if id != "":
+#         cmd = """INSERT INTO workprogram(matricule_fk) VALUES(%s)"""
+#         values = (id,)
+#         mycursor.execute(cmd, values)  # Execute the Commande 1
+#         conn.commit()
+#         print("Information registered successfully in database..!")
+#     else:
+#         print("Information not filled", "Please fill informations first...")
+#         conn.rollback()
 
 
 def deleteStudent(id):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
     mycursor = conn.cursor()
-    cmdDel1 = "DELETE FROM student WHERE student.matriculeEtudiant = %s"
+    cmdDel1 = "DELETE FROM student WHERE matricule = %s"
     mycursor.execute(cmdDel1, [id])
-    cmdDel2 = "DELETE FROM workprogram WHERE ID = %s"
+    cmdDel2 = "DELETE FROM workprogram WHERE id = %s"
     mycursor.execute(cmdDel2, [id])
-    cmdDel3 = "DELETE FROM finance WHERE ID = %s"
+    cmdDel3 = "DELETE FROM finance WHERE id = %s"
     mycursor.execute(cmdDel3, [id])
-    cmdDel4 = "DELETE FROM appartenir WHERE appartenir.id_promotion_fk = %s"
+    cmdDel4 = "DELETE FROM appartenir WHERE promotion_fk = %s"
     mycursor.execute(cmdDel4, [id])
     student = conn.commit()
     print("record deleted with success...")
@@ -145,5 +242,3 @@ def takePic(id, name):
             break
     cv2.destroyAllWindows()
     video.release()
-
-

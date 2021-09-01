@@ -1,14 +1,17 @@
 from base64 import b64encode
 import cv2
 import mysql
-from flask import Flask, render_template, request, Response, url_for
+from flask import Flask, render_template, request, Response, url_for, flash
 from flask_paginate import get_page_parameter, Pagination
 import myRequests
 from camera import VideoCamera
+import test
 
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 static_url_path = '/static'
+
+db = test.db
 
 path = './images'
 img_path = []
@@ -43,18 +46,35 @@ def registeredSt():
 @app.route("/registerInfo", methods=['POST', 'GET'])
 def registerStudent():
     if request.method == 'POST':
-        Matricule = request.form["id"]
-        Noms = request.form["noms"]
-        Genre = request.form["genre"]
-        Faculte = request.form["faculte"]
-        Departement = request.form["departement"]
-        Promotion = request.form["promotion"]
-        Annee = request.form["annee"]
-        files = request.files['file']
-        file = str(files)
+        if not request.form['id'] or not request.form['noms'] or not request.form['genre'] or not request.form['faculte'] or not request.form['departement'] or not request.form['promotion'] or not request.files['file']:
+            flash('Ples enter all the fields', 'error')
+        else:
+            Matricule = request.form["id"]
+            Noms = request.form["noms"]
+            Genre = request.form["genre"]
+            Faculte = request.form["faculte"]
+            Departement = request.form["departement"]
+            Promotion = request.form["promotion"]
+            Annee = request.form["annee"]
+            files = request.files["file"]
+            file = str(files)
+            # etudiantOb = test.Etudiant(matricule=Matricule, nom=Noms, genre=Genre, photo=file)
+            # studentObj = test.Student(Matricule, Noms, Genre, file)
         if request.form["submit"] == "SaveInfo":
-            print('matricule :',Matricule,' noms ',Noms, ' genre ',Genre, ' fac ',Faculte,' departem ',Departement,' promo ',Promotion,' annee ',Annee,' photo ',file)
             myRequests.RegisterStudent(Matricule, Noms, Genre, Faculte, Departement, Promotion, Annee, file)
+            # myRequests.RegisterFac(Faculte)
+            # myRequests.RegisterFincance(Matricule)
+            # myRequests.RegisterDepartem(Departement)
+            # myRequests.RegisterProm(Promotion)
+            # myRequests.RegisterAnnee(Matricule, Annee)
+            # myRequests.RegisterWps(Matricule)
+
+            # promotionOb = test.Promotion.query.all().first()
+
+            # db.session.add(studentObj)
+            # db.session.commit()
+
+            flash('Reccord was successfully added')
 
     # Pagination management
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -95,16 +115,14 @@ def search():
         # search by name or id
         conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")
         mycursor = conn.cursor()
-        mycursor.execute("SELECT matriculeEtudiant, nomsEtudiant, genreEtudiant, faceEtudiant, "
-                         "faculte.designation_fac, departement.designation_departem, promotion.designation_prom, "
-                         "appartenir.annee_academ, finance.solde, workprogram.seance FROM student JOIN appartenir ON "
-                         "student.matriculeEtudiant=appartenir.matricule_fk JOIN promotion ON "
-                         "appartenir.id_promotion_fk=promotion.id_promotion JOIN departement ON "
-                         "promotion.departement_fk = departement.id_departement JOIN faculte ON "
-                         "departement.faculte_fk =faculte.id_fac JOIN finance ON "
-                         "student.matriculeEtudiant=finance.matricule_fk JOIN workprogram ON "
-                         "student.matriculeEtudiant=workprogram.matricule_fk WHERE student.matriculeEtudiant "
-                         "LIKE %s OR nomsEtudiant LIKE %s OR genreEtudiant LIKE %s LIMIT %s OFFSET %s", ("%"+keyWord+"%", "%"+keyWord+"%", keyWord, limit, offset))
+        mycursor.execute("SELECT matricule, noms, genre, photo, faculte.designation_fac, departement.designation_dep, " \
+                         "promotion.designation_prom, appartenir.annee_academ, finance.solde, workprogram.seance FROM "
+                         "student JOIN appartenir ON student.matricule = appartenir.matricule_fk  JOIN promotion ON "
+                         "appartenir.promotion_fk = promotion.id_prom JOIN departement ON  promotion.departement_fk = "
+                         "departement.id_dep JOIN faculte ON departement.faculte_fk = faculte.id_fac JOIN finance ON "
+                         "student.matricule = finance.matricule_fk JOIN workprogram ON student.matricule = "
+                         "workprogram.matricule_fk WHERE student.matricule LIKE %s OR noms LIKE %s OR genre LIKE %s "
+                         "LIMIT %s OFFSET %s", ("%" + keyWord + "%", "%" + keyWord + "%", keyWord, limit, offset))
         studentsList = mycursor.fetchall()
         mycursor.close()
         pagination = Pagination(page=page, per_page=limit, css_framework='bootstrap4')
