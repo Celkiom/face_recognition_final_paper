@@ -3,112 +3,109 @@
 	{% block body %}
 
 		<div class="principalNav2">
-
-			{% for message in get_flashed_message() %}
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					{{message}}
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
-			{% endfor %}
-
-			<label class="titlePage">Student Info</label>
+			<label class="titlePage">Student Info</label> <br>
+			<div class="messageFlash">
+				{% for message in get_flashed_messages() %}
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+<!--							<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href=../icons/fac-bg.jpg"#check-circle-fill"/></svg>-->
+						<strong>Student </strong>{{message}}
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+<!--						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+					</div>
+				{% endfor %}
+			</div>
 			<div class="registerInfo">
 			  <!-- Button to Open the Modal -->
-				<button type="button" class="registerBtn" data-toggle="modal" data-target="#myModal">Add student info </button>
+				<button type="button" class="registerBtn" data-toggle="modal" data-target="#myModal">Add student</button>
+				<td><button name="submit" value="edit" class="updateBtn btn btn-sm btn-warning " data-toggle="modal" data-target="#myModal2">Update Info</button></td>
 				<form class="row justify-content-end m-0" ACTION="/filterStudent" method="POST">
 					<div class="recherche">
 						<input type="text" name="recherche" class="form-control search-input" placeholder="Search someone by name or id">
 					</div>
 					<div class="col-md-1 m-0 ">
-					<button type="submit" class="btn btn-info">Search</button>
+						<button type="submit" class="btn btn-info">Search</button>
 					</div>
 				</form>
-
+			</div>
 			  <!-- The Modal -->
 			  <div class="modal" id="myModal">
 			    <div class="modal-dialog">
 			      <div class="modal-content">
-<!--					<form class="text-center modalInfo" action="/registerInfo" method="POST" enctype="multipart/form-data">-->
 			        <!-- Modal Header -->
 			        <div class="modal-header">
 			          <h4 class="modal-title">Register student</h4>
 			          <button type="button" class="close" data-dismiss="modal">&times;</button>
 			        </div>
 			        <!-- Modal body -->
-			        <div class="modal-body registering">
-			          <form class="text-center modalInfo" action="/registerInfo" method="POST" enctype="multipart/form-data">
-						<div class="form-group">
-							<input type="text" name="id" placeholder="Matricule" class="form-control input" required>
-						</div>
-						<div class="form-wrapper form-group">
-							<input type="text" name="noms" placeholder="Fullname" class="form-control" required> <i class="zmdi zmdi-account"></i> 
-						</div>
-
-						<div class="form-group">
-							<select name="genre" class="form-control" >
-								<option value="" disabled selected>Gender</option>
-								<option value="Masculin">Masculin</option>
-								<option value="Feminin">Feminin</option>
-								<option value="Other">Other</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<select name="faculte" class="form-control" >
-								<option value="" disabled selected>Faculty</option>
-								<option value="Fasa">Fasa</option>
-								<option value="Fasic">Fasic</option>
-								<option value="Economie">Economie</option>
-								<option value="Law">Law</option>
-								<option value="Theology">Theology</option>
-								<option value="Other">Other</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<select name="departement"  class="form-control" >
-								<option value="" disabled selected>Department</option>
-								<option value="GI">GI</option>
-								<option value="GEM">GEM</option>
-								<option value="EG">EG</option>
-								<option value="Agribusness">Agribusness</option>
-								<option value="Droit Public">Droit Public</option>
-								<option value="Droit privé">Droit privé</option>
-								<option value="Leadership">Leadership</option>
-								<option value="Other">Other</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<select name="promotion"  class="form-control" >
-								<option value="" disabled selected>Promotion</option>
-								<option value="L0">L0</option>
-								<option value="L1">L1</option>
-								<option value="L2">L2</option>
-								<option value="L3">L3</option>
-							</select>
-						</div>
-						<div class="form-wrapper form-group">
-							<input name="annee" type="text" placeholder="Academic year" class="form-control" required> 
-						</div>
-
-					  <div class="selectPhoto">
-					  	<div enctype="multipart/form-data" class="parcourirform">
-					  		<img src="" id="file" class="centerCard studentCam" height="150px">
-					  		<input type="file" name="file" onchange="displayImage.call(this)">
-						</div>
-					   </div>
+						<form class="text-center modalInfo" action="/registerInfo" method="POST" enctype="multipart/form-data">
+							<div class="conteneurForm">
+							  <div class="modal-body registering">
+									<div class="form-group">
+										<input type="text" name="id" placeholder="Matricule" class="form-control input" required>
+									</div>
+									<div class="form-wrapper form-group">
+										<input type="text" name="noms" placeholder="Fullname" class="form-control" required> <i class="zmdi zmdi-account"></i>
+									</div>
+									<div class="form-group">
+										<select name="genre" class="form-control" >
+											<option value="" disabled selected>Gender</option>
+											<option value="Masculin">Masculin</option>
+											<option value="Feminin">Feminin</option>
+											<option value="Other">Other</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<select name="faculte" class="form-control" >
+											<option value="" disabled selected>Faculty</option>
+											<option value="Fasa">Fasa</option>
+											<option value="Fasic">Fasic</option>
+											<option value="Economie">Economie</option>
+											<option value="Law">Law</option>
+											<option value="Theology">Theology</option>
+											<option value="Other">Other</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<select name="departement"  class="form-control" >
+											<option value="" disabled selected>Department</option>
+											<option value="GI">GI</option>
+											<option value="GEM">GEM</option>
+											<option value="EG">EG</option>
+											<option value="Agribusness">Agribusness</option>
+											<option value="Droit Public">Droit Public</option>
+											<option value="Droit privé">Droit privé</option>
+											<option value="Leadership">Leadership</option>
+											<option value="Other">Other</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<select name="promotion"  class="form-control" >
+											<option value="" disabled selected>Promotion</option>
+											<option value="L0">L0</option>
+											<option value="L1">L1</option>
+											<option value="L2">L2</option>
+											<option value="L3">L3</option>
+										</select>
+									</div>
+									<div class="form-wrapper form-group">
+									<input name="annee" type="text" placeholder="Academic year" class="form-control" required>
+								</div>
+							  </div>
+								<div class="selectPhoto">
+								  <div enctype="multipart/form-data" class="parcourirform">
+									<img src="" id="file" class="centerCard studentCam" height="150px">
+									<input type="file" name="file" onchange="displayImage.call(this)">
+								  </div>
+								</div>
+							</div>
 						  <!-- Modal footer -->
 							<div class="modal-footer">
 							  <button name="submit" type="submit" value="SaveInfo" class="btn btn-success">Save Info</button>
 							</div>
 			        	</form>
-
-			        </div>
-
-			      </div>
-			    </div>
+				  </div>
+				</div>
 			  </div>
-			</div>
-
-
 <!-- the end of modal part and begining of table management -->
 <!-- ======================================================= -->
 			<div class="card tablemodify">
@@ -124,7 +121,6 @@
 						  <th>Financial status</th>
 						  <th>Workprogram</th>
 							<th></th>
-							<th></th>
 						</tr>
 				  </thead>
 				  <tbody>
@@ -137,16 +133,91 @@
 						  <td>{{row[6]}}</td>
 						  <td><b>{{row[8]}}$</b></td>
 						  <td><b>{{row[9]}}%</b></td>
-							<form action="{{url_for('deleteStudent', id=row[0])}}" method="POST">
-								<td><button onclick="return confirm('Voulez-vous vraiment supprimé?')" type="submit" class="btn btn-sm btn-warning">!</button></td>
-								<td><button onclick="return confirm('Voulez-vous vraiment supprimé?')" type="submit" class="btn btn-sm btn-danger">X</button></td>
-							</form>
+						  <form action="{{url_for('deleteStudent', id=row[0])}}" method="POST">
+							<td><button onclick="return confirm('Voulez-vous vraiment supprimé?')" type="submit" name="submit" value="delete" class="btn btn-sm btn-danger">X</button></td>
+						  </form>
 						</tr>
-					{% endfor %}
+				{% endfor %}
 				  </tbody>
 				</table>
-					
+				{{ pagination.links }}
 			</div>
+
+<!--			========================second modal=========================-->
+			<div class="">
+			  <!-- The Modal -->
+			  <div class="modal" id="myModal2">
+			    <div class="modal-dialog">
+			      <div class="modal-content">
+			        <!-- Modal Header -->
+			        <div class="modal-header">
+			          <h4 class="modal-title">Update info student</h4>
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        </div>
+			        <!-- Modal body -->
+			          <form class="text-center modalInfo" action="/editInfo" method="POST" enctype="multipart/form-data">
+						<div class="conteneurForm">
+						  <div class="modal-body">
+							  <div class="form-group">
+										<input type="text" name="idEdit" placeholder="Matricule" class="form-control input" required>
+									</div>
+							  <div class="form-wrapper form-group">
+								<input type="text" name="nomsEdit" placeholder="Fullname" class="form-control" required>
+							  </div>
+							  <div class="form-group">
+									<select name="faculteEdit"  class="form-control" >
+										<option value="" disabled selected>Faculty</option>
+										<option value="Fasa">Fasa</option>
+										<option value="Fasic">Fasic</option>
+										<option value="Economie">Economie</option>
+										<option value="Law">Law</option>
+										<option value="Theology">Theology</option>
+										<option value="Other">Other</option>
+									</select>
+								</div>
+							  <div class="form-group">
+									<select name="departementEdit" class="form-control" >
+										<option value="" disabled selected>Department</option>
+										<option value="GI">GI</option>
+										<option value="GEM">GEM</option>
+										<option value="EG">EG</option>
+										<option value="Agribusness">Agribusness</option>
+										<option value="Droit Public">Droit Public</option>
+										<option value="Droit privé">Droit privé</option>
+										<option value="Leadership">Leadership</option>
+										<option value="Other">Other</option>
+									</select>
+								</div>
+							  <div class="form-group">
+									<select name="promotionEdit" class="form-control" >
+										<option disabled selected>Promotion</option>
+										<option value="L0">L0</option>
+										<option value="L1">L1</option>
+										<option value="L2">L2</option>
+										<option value="L3">L3</option>
+									</select>
+								</div>
+							  <div class="form-wrapper form-group">
+								<input name="anneeEdit" type="text" placeholder="Academic year" class="form-control" required>
+							</div>
+						  </div>
+						  <div class="selectPhoto">
+							<div enctype="multipart/form-data" class="parcourirform">
+								<img src="" id="fileEdit" class="centerCard studentCam" height="150px">
+								<input type="file" name="fileEdit" onchange="displayImageEdit.call(this)">
+							</div>
+						   </div>
+						</div>
+					  <!-- Modal footer -->
+						<div class="modal-footer">
+						  <button name="submit" type="submit" value="SaveEdit" class="btn btn-success">Update Info</button>
+						</div>
+					  </form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
 		</div>
 
 	{% endblock %}

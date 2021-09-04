@@ -28,6 +28,18 @@
 					obj.readAsDataURL(this.files[0]);
 				}
 			}
+
+			function displayImageEdit(){
+				if(this.files && this.files[0]){
+					var obj = new FileReader();
+					obj.onload = function(data){
+						var image = document.getElementById('fileEdit');
+						image.src = data.target.result;
+						image.style.display = "block";
+					}
+					obj.readAsDataURL(this.files[0]);
+				}
+			}
 		</script>
 	</head>
 
