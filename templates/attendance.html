@@ -4,13 +4,19 @@
 
 		<div class="principalNav2">
 			<label class="titlePage">Attendance</label>
-			<div class="attendancePictures">
-				<img src="data:image/jpeg;base64, {{ image_web }}" alt="", class="centerCard studentPic">
-				<img src="data:image/jpeg;base64, {{ image_web }}" alt="", class="centerCard fingerPic">
 
+			<div class="attendancePictures">
+<!--				This part concerns display of someone's picture and name by entering his ID-->
+<!--				============================================================================-->
+<!--				<form action="/attendances" method="POST" enctype="multipart/form-data">-->
+<!--					<input type="text" name="matri" placeholder="Matricule">-->
+<!--					<input name="save" type="submit" value="SaveInfo" class="btn btn-success">-->
+<!--						<img src="data:static/icons;base64,{{image}}", class="centerCard studentPic"/>-->
+<!--						<p style="color:green; padding-left:100px;">{{name}}</p>-->
+<!--				</form>-->
+				<img src="{{url_for('video_feed')}}" alt="", class="centerCard studentvid">
+				<a href="http://127.0.0.1:5000/index" class="endBtn">End activity</a>
 			</div>
-			<p>Alain walker</p>
-			<a href="http://127.0.0.1:5000/index" class="endBtn">End activity</a>
 		</div>
 
 	{% endblock %}

@@ -9,13 +9,14 @@
 body{
 	display: flex;
 	flex-direction: row;
+	background-image: url("../icons/fac-bg.jpg");
 }
 
 .leftNav{
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-	width: 14%;
+	width: 15%;
 	height: 625px;					/* je dois gerer la hauteur de facon automatique */
 	background-color: #b4b4b4;
 }
@@ -25,10 +26,10 @@ body{
 	border-bottom-left-radius: 50px;
 	background: #e7eaec;
 	color: black;
-	font-size: 1.2em;
-	margin: 0px 0px 35px 10px;
-	padding-top: 6px;
-	padding-bottom: 6px;
+	font-size: 1.3em;
+	margin: 0px 0px 20px 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	text-align: center;
 }
 
@@ -58,11 +59,13 @@ body{
 	flex-direction: row;
 	background-image: url("../icons/fac-bg.jpg");
 	background-size: cover;
+	width:85%;
 }
 
 .principalLeft{
-	height: 625px;					/* je dois gerer la hauteur de facon automatique */
-	width: 600px;
+    background-image: url("../icons/fac-bg.jpg");
+	height: 100%;					/* je dois gerer la hauteur de facon automatique */
+	width: 43%;
 	display: flex;
 	flex-direction: column;
 	align-content: center;
@@ -75,8 +78,8 @@ body{
 	background-position: right;
 	background-size: cover;
 	/*background: #d0c1d1;*/
-	height: 625px;					/* je dois gerer la hauteur de facon automatique */
-	width: 575px;
+	height: 100%;					/* je dois gerer la hauteur de facon automatique */
+	width: 57%;
 	border-top-left-radius: 250px;
 	border-bottom-left-radius: 250px;
 }
@@ -112,10 +115,11 @@ body{
  *==============================*/
 
 .principalNav2{
-	width: 100%;
+	width: 85%;
+	height:auto;
 	display: flex;
 	flex-direction: column;
-	background-image: url("../icons/fac-bg.jpg");
+	background-image: url("../icons/gallery.jpg");
 	background-size: cover;
 	align-content: center;
 	text-align: center;
@@ -126,7 +130,7 @@ body{
 	background: #e4e4e4;
 	font-size: 1.3em;
 	padding: 5px 0px;
-	margin: 40px 200px;
+	margin: 20px 200px;
 }
 
 .messageFlash{
@@ -179,7 +183,7 @@ body{
 	border-bottom: 1px solid #6d727486;
 	background: transparent;
 	color: #6a568b;
-	margin-left: 400px;
+	margin-left: 250px;
 }
 
 .conteneurForm{
@@ -217,7 +221,7 @@ flex-direction: row;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .principalNav2 p{
@@ -230,14 +234,22 @@ flex-direction: row;
 .centerCard{
     background-position: center;
     background-size: contain;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 .studentPic{
 	background-image: url("../icons/control1.png");
 	height: 200px;
     width: 200px;
-	margin-right: 200px;
+	margin-right: 150px;
+	margin-top: 50px;
+}
+
+.studentvid{
+background-image: url("../icons/control1.png");
+	height: 480px;
+    width: 750px;
+    box-shadow: 0px 0px 20px blue;
 }
 
 .fingerPic{
@@ -249,8 +261,8 @@ flex-direction: row;
 
 .endBtn{
 	background: #c56666;
-	margin-top: 70px;
-	margin-left: 500px;
+	margin-top: 440px;
+	margin-left: 40px;
 	width: 150px;
 	color: black;
 	border-radius: 25px;
@@ -267,14 +279,16 @@ flex-direction: row;
 /* CSS for Recognition part one*
  *=============================*/
 .noticeRecogn{
-	margin-top: 50px;
-	margin-bottom: 20px;
+	margin-top: 0;
+	margin-bottom: 10px;
 	color: gray;
-	font-size: 1.2em;
+	font-size: 1em;
 }
 
 .recogOneInfo{
-	margin: 0 450px;
+	margin: 0 280px;
+	align-content: center;
+
 }
 
 .recogOneInfo input{
@@ -283,26 +297,32 @@ flex-direction: row;
 	border-bottom: 1px solid #6d727486;
 	background: transparent;
 	color: #6a568b;
-	margin-top: 25px;
+	margin-top: 30px;
 	font-size: 1.1em;
-	text-align: center;
 }
 
 .recogOneInfo input:focus{
 	border: none;
 	background: transparent;
-	border-bottom: 1px solid #6d727486;
+	border-bottom: 1px solid #745b9d;
 	color: #000;
 	text-align: center;
 }
 
+.recognFirst{
+    width: 85%;
+	height:auto;
+}
 .startBtn{
-	margin: 70px 510px 0;
+	margin-top: 50px;
+	margin-left:470px;
 	background: #745b9d;	
 	color: white;
 	font-size: 1.2em;
 	border-radius: 25px;
 	padding:6px 0;
+	width:170px;
+	border: none;
 }
 
 .startBtn:hover{
