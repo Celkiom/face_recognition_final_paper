@@ -13,7 +13,7 @@ class VideoCamera(object):
 
     path = './photos'
     idDB = []  # List which will store all id from DB
-    idList, images = getIdAndImages()  # Returns ID and Images
+    idList, images = getIdAndImages(path)  # Returns ID and Images
     encodeImgKnown = findEncodings(images)  # takes images encodes
     Student = studentInformation()  # Stores all the information from DB
 

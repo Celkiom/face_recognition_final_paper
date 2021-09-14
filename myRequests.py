@@ -1,10 +1,13 @@
 # Management of requests
 # ==========================>
-import base64
+from base64 import b64decode
 
 import face_recognition
 import cv2
 import os
+import numpy as np
+from io import BytesIO
+from PIL import Image
 import mysql.connector
 
 path = './images'
@@ -30,39 +33,34 @@ def studentInformation():
     return student
 
 
-# def getIdAndImages(way):
+def getIdAndImages(way):
+    faces = []  # List which will store faces
+    faceid = []  # List which will store different id
+    for root, directory, filenames in os.walk(way):
+        for filename in filenames:  # file will store all the name of each image
+            separe = filename.split(".")  # spliting filename by '.'
+            ID = int(separe[0])  # save just the id given to the image wich is in position [1]
+            img_path = os.path.join(root, filename)  # this directly assigns folder name 0,1,...
+            img = cv2.imread(img_path)  # reading the path containing image
+            faces.append(img)  # Add faces to my list
+            faceid.append(ID)  # Add the id in our list
+        print("liste des id pour chaque face du dataset :", faceid)  # It shows the list containing the Id appended
+    return faceid, faces
+
+
+# def getIdAndImages():
 #     faces = []  # List which will store faces
 #     faceid = []  # List which will store different id
-#     for root, directory, filenames in os.walk(way):
-#         for filename in filenames:  # file will store all the name of each image
-#             separe = filename.split(".")  # spliting filename by '.'
-#             ID = int(separe[0])  # save just the id given to the image wich is in position [1]
-#             img_path = os.path.join(root, filename)  # this directly assigns folder name 0,1,...
-#             img = cv2.imread(img_path)  # reading the path containing image
-#             faces.append(img)  # Add faces to my list
-#             faceid.append(ID)  # Add the id in our list
-#         print("liste des id pour chaque face du dataset :", faceid)  # It shows the list containing the Id appended
-#     return faceid, faces
-
-
-def getIdAndImages():
-    faces = []  # List which will store faces
-    decodeImg = []
-    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
-    mycursor = conn.cursor()
-    mycursor.execute("SELECT noms, photo FROM student")
-    data = mycursor.fetchall()
-    for x in data:
-        # global img
-        img = x[1]
-        print('les images from db ',img)
-        decodeImg = base64.b64encode(img).decode('utf-8')
-        # with open(decodeImg, 'rb') as f:
-        for im in decodeImg:
-            pict = cv2.imread(im)
-            faces.append(pict)  # Add faces to my list
-        print("liste des face du DB :", faces)  # It shows the list containing the Id appended
-        return faces
+#     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+#     mycursor = conn.cursor()
+#     mycursor.execute("SELECT matricule, photo FROM student")
+#     data = mycursor.fetchall()
+#     for x in data:
+#         img = np.array(Image.open(BytesIO(x[1])))  #converting image from db with type byte to array
+#         faces.append(img)
+#         faceid.append(x[0])
+#         # print("liste des face du DB :", faces)  # It shows the list containing the Id appended
+#         return faceid, faces
 
 
 def findEncodings(images):
