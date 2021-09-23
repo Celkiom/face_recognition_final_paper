@@ -2,11 +2,31 @@
 	{% block body %}
 
 <div class="leftNav">
-	<a href="http://127.0.0.1:5000/index" class="navBtn">home</a>
-	<a href="http://127.0.0.1:5000/registered" class="navBtn">Student infos</a>
-	<a href="http://127.0.0.1:5000/recognition" class="navBtn">Recognition</a>
-	<a href="http://127.0.0.1:5000/attendance" class="navBtn">Attendance</a>
-	<a href="http://127.0.0.1:5000/authentication" class="navBtn">Log-out</a>
+	<div>
+		<div>LOGO</div>
+		<a href="http://127.0.0.1:5000/index" class="navBtn">
+			<i class="fa fa-home"></i>
+			Home
+		</a>
+		<a href="http://127.0.0.1:5000/registered" class="navBtn">
+			<i class="fa fa-users" aria-hidden="true"></i>
+			Student infos
+		</a>
+		<a href="http://127.0.0.1:5000/recognition" class="navBtn">
+			<i class="fa fa-video" aria-hidden="true"></i>
+			Recognition
+		</a>
+		<a href="http://127.0.0.1:5000/attendance" class="navBtn">
+			<i class="fa fa-calendar-check" aria-hidden="true"></i>
+			Attendance
+		</a>
+	</div>
+	<div>
+		<a href="http://127.0.0.1:5000/authentication" class="navBtn">
+			<i class="fa fa-power-off" aria-hidden="true"></i>
+			Log-out
+		</a>
+	</div>
 </div>
 
 	{% endblock %}

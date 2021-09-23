@@ -180,7 +180,7 @@ def signAttendance(idEtudiant):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
     mycursor = conn.cursor()
     cmd = """UPDATE liste_presence SET signature =%s WHERE matricule_fk = %s AND signature = %s"""
-    value = (1, idEtudiant, 0)
+    value = ('Present', idEtudiant, 'Entree')
     mycursor.execute(cmd, value)  # Execute the Commande 1
     conn.commit()
     conn.close()
@@ -189,9 +189,13 @@ def signAttendance(idEtudiant):
 def openDoor(idEtudiant):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
     mycursor = conn.cursor()
-    cmd = """INSERT INTO liste_presence(signature, matricule_fk) VALUES(%s, %s)"""
-    value = (0, idEtudiant)
-    mycursor.execute(cmd, value)  # Execute the Commande 1
+    cmd1 = """UPDATE liste_presence SET signature =%s WHERE matricule_fk = %s AND signature = %s"""
+    value1 = ('Absent', idEtudiant, 'Entree')
+    mycursor.execute(cmd1, value1)  # Execute the Commande 1
+
+    cmd2 = """INSERT INTO liste_presence(signature, matricule_fk) VALUES(%s, %s)"""
+    value2 = ('Entree', idEtudiant)
+    mycursor.execute(cmd2, value2)  # Execute the Commande 1
     conn.commit()
     print("Information registered successfully in database..!")
     conn.close()

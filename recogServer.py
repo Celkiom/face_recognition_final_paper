@@ -1,10 +1,9 @@
 import base64
 import mysql
-from flask import Flask, render_template, request, Response, url_for, flash, redirect
+from flask import Flask, render_template, request, Response, url_for, flash
 from flask_paginate import get_page_parameter, Pagination
 import myRequests
 from camera import VideoCamera
-
 
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -17,8 +16,6 @@ path = './photos'
 img_path = []
 # for pagination
 limit = 5  # perPage
-
-
 
 
 @app.route('/')
@@ -79,6 +76,7 @@ def registerStudent():
 @app.route('/recognition')
 def reconnaissance():
     return render_template('recognitionOne.html')
+
 
 # This part returns picture and name by entering the id
 # =====================================================

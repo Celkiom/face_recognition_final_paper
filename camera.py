@@ -1,10 +1,15 @@
 import cv2
 import numpy as np
 import face_recognition
+from flask import flash
+
 from myRequests import getIdAndImages, findEncodings, studentInformation, signAttendance, openDoor
+from arduinoControlLed import ArduinoSignal
 
 Name = ''
 identifList = []  # this takes id returns by face and filter them to avoid double insertion in DB
+identifiantList = []
+message = ''
 
 
 class VideoCamera(object):
@@ -46,12 +51,20 @@ class VideoCamera(object):
                     else:
                         for val in self.Student:
                             if val[0] == identifiant:  # check if id from dataset are in DB
-                                signAttendance(identifiant)
+                                global identifiantList
+                                if identifiant not in identifList and identifiant not in identifiantList:
+                                    global message
+                                    message = 'Desole, vous n\'avez pas signe a l\'entree'
+                                elif identifiant in identifList and identifiant not in identifiantList:
+                                    identifiantList.append(identifiant)
+                                    message = 'Attendance was taken successfully'
+                                    signAttendance(identifiant)
+                                    ArduinoSignal('1')
                         y1, x2, y2, x1 = faceLoc
                         y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
                         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 1)
-                        cv2.putText(img, f"Attendance was taken successfully", (x1 - 90, y2 + 15),
-                                    cv2.FONT_HERSHEY_COMPLEX_SMALL, .8, (77, 255, 140), 2)
+                        cv2.putText(img, message, (x1 - 90, y2 + 15),
+                                    cv2.FONT_HERSHEY_COMPLEX_SMALL, .9, (77, 255, 140), 1)
             else:
                 cv2.putText(img, "Unknown face need Registration", (30, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255),
                             2)
@@ -95,8 +108,9 @@ class VideoCamera(object):
                                 if identif not in identifList:
                                     identifList.append(identif)
                                     openDoor(identif)  # Method that allows to open door
+                                    ArduinoSignal('1')
                                 else:
-                                    print('Vous avez deja signe la presence =::=')
+                                    print('Vous avez deja signé la présence, Merci..:)')
                                 global Name
                                 Name = val[1]
                                 y1, x2, y2, x1 = faceLoc

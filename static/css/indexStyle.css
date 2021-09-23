@@ -15,41 +15,28 @@ body{
 .leftNav{
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-	width: 15%;
-	height: 625px;					/* je dois gerer la hauteur de facon automatique */
-	background-color: #b4b4b4;
+    justify-content: space-between;
+    background: #617e99;
+    width: 15%;
+    height: 100vh;
+    transition: background 0.3s ease-in-out;
 }
 
 .navBtn{
-	border-top-left-radius: 50px;
-	border-bottom-left-radius: 50px;
-	background: #e7eaec;
-	color: black;
-	font-size: 1.3em;
-	margin: 0px 0px 20px 10px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	text-align: center;
+    display: block;
+    padding: 8px;
+    margin: 5px 0;
+    padding-bottom: 13px;
+    color: white;
 }
 
-.navBtn:hover{
+.navBtn:hover,
+.navBtn.active{
+    background: white;
+    color: #617e99;
     text-decoration: none;
-    color: #8c5dad;
-    border-right: 5px solid #8c5dad;
-	transform: scale(1.025);
-	transition:  .3s;
 }
 
-.navBtn:last-child{
-	background: #c56666;
-	margin-bottom: 70px;
-	margin-top: 50px;
-}
-
-.navBtn:last-child:hover{
-	color: #a49a9a;
-}
 
  /*	CSS for welcome page * 
   *======================*/
