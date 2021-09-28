@@ -59,15 +59,13 @@ class VideoCamera(object):
                                     identifiantList.append(identifiant)
                                     message = 'Attendance was taken successfully'
                                     signAttendance(identifiant)
-                                    ArduinoSignal('1')
+                                    # ArduinoSignal('1')
                         y1, x2, y2, x1 = faceLoc
                         y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
                         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 1)
-                        cv2.putText(img, message, (x1 - 90, y2 + 15),
-                                    cv2.FONT_HERSHEY_COMPLEX_SMALL, .9, (77, 255, 140), 1)
+                        cv2.putText(img, message, (x1 - 90, y2 + 15), cv2.FONT_HERSHEY_COMPLEX_SMALL, .9, (77, 255, 140), 1)
             else:
-                cv2.putText(img, "Unknown face need Registration", (30, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255),
-                            2)
+                cv2.putText(img, "Unknown face need Registration", (30, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
         cv2.putText(img, "The light must be good in front", (20, 40), cv2.FONT_HERSHEY_COMPLEX, 1, (200, 0, 40), 1)
 
         return img
@@ -108,7 +106,7 @@ class VideoCamera(object):
                                 if identif not in identifList:
                                     identifList.append(identif)
                                     openDoor(identif)  # Method that allows to open door
-                                    ArduinoSignal('1')
+                                    # ArduinoSignal('1')
                                 else:
                                     print('Vous avez deja signé la présence, Merci..:)')
                                 global Name

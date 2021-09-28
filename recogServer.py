@@ -49,6 +49,41 @@ def registeredSt():
     return render_template('studentInfo.html', student=studentsList, pagination=pagination, page=page)
 
 
+@app.route('/presenceList', methods=['POST', 'GET'])
+def PresenceList():
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    offset = page * limit - limit
+    presenceList = listePresence(limit, offset)
+    pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+    return render_template('listePresence.html', studentList=presenceList, pagination=pagination, page=page)
+
+
+@app.route('/supervisorList', methods=['POST', 'GET'])
+def supervisorList():
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    offset = page * limit - limit
+    supevisorList = listeSuivie(limit, offset)
+    pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+    return render_template('supervisorList.html', supervisorList=supevisorList, pagination=pagination, page=page)
+
+
+@app.route('/recognition')
+def reconnaissance():
+    return render_template('recognitionOne.html')
+
+
+@app.route("/recognitionInfo", methods=['POST', 'GET'])
+def recognitionInfo():
+    if request.method == 'POST':
+        cours = request.form["course"]
+        salle = request.form["room"]
+        superviseur = request.form["supervisor"]
+        date = request.form["dateActivity"]
+        if request.form["submit"] == "Save":
+            myRequests.recognitionInfo(cours, salle, superviseur, date)
+    return render_template('streamingPage.html')
+
+
 @app.route("/registerInfo", methods=['POST', 'GET'])
 def registerStudent():
     if request.method == 'POST':
@@ -71,11 +106,6 @@ def registerStudent():
     studentsList = paginationInfo(limit, offset)
     pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
     return render_template('studentInfo.html', student=studentsList, pagination=pagination, page=page)
-
-
-@app.route('/recognition')
-def reconnaissance():
-    return render_template('recognitionOne.html')
 
 
 # This part returns picture and name by entering the id
@@ -147,8 +177,42 @@ def search():
                          "LIMIT %s OFFSET %s", ("%" + keyWord + "%", "%" + keyWord + "%", keyWord, limit, offset))
         studentsList = mycursor.fetchall()
         conn.close()
-        pagination = Pagination(page=page, per_page=limit, css_framework='bootstrap4')
+        pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
         return render_template('studentInfo.html', student=studentsList, pagination=pagination, page=page)
+
+
+# endpoint for search in presence
+@app.route('/filterPresence', methods=['POST', 'GET'])
+def searchPresence():
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    offset = page * limit - limit
+    if request.method == "POST":
+        keyWord = request.form['recherche']
+        # search by name or id
+        conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")
+        mycursor = conn.cursor()
+        mycursor.execute("SELECT * FROM liste_presence WHERE matricule_fk LIKE %s LIMIT %s OFFSET %s", ("%" + keyWord + "%", limit, offset))
+        studentsList = mycursor.fetchall()
+        conn.close()
+        pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+        return render_template('listePresence.html', studentList=studentsList, pagination=pagination, page=page)
+
+    # endpoint for search in supervisor
+    @app.route('/filterSupervisor', methods=['POST', 'GET'])
+    def searchSupervisor():
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        offset = page * limit - limit
+        if request.method == "POST":
+            keyWord = request.form['recherche']
+            # search by name or id
+            conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")
+            mycursor = conn.cursor()
+            mycursor.execute("SELECT * FROM suivie_examen WHERE examen_du_jour LIKE %s OR superviseur LIKE %s LIMIT "
+                             "%s OFFSET %s", ("%" + keyWord + "%", "%" + keyWord + "%", limit, offset))
+            supevisorList = mycursor.fetchall()
+            conn.close()
+            pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+            return render_template('listePresence.html', supevisorList=supevisorList, pagination=pagination, page=page)
 
 
 def paginationInfo(lim, offs):
@@ -164,6 +228,24 @@ def paginationInfo(lim, offs):
     studentsList = mycursor.fetchall()
     conn.close()
     return studentsList
+
+
+def listePresence(lim, offs):
+    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
+    mycursor = conn.cursor()
+    mycursor.execute("SELECT * FROM liste_presence LIMIT %s OFFSET %s", (lim, offs))
+    presenceInfo = mycursor.fetchall()
+    conn.close()
+    return presenceInfo
+
+
+def listeSuivie(lim, offs):
+    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
+    mycursor = conn.cursor()
+    mycursor.execute("SELECT * FROM suivie_examen LIMIT %s OFFSET %s", (lim, offs))
+    suivieInfo = mycursor.fetchall()
+    conn.close()
+    return suivieInfo
 
 
 def generator(camer):

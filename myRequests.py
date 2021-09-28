@@ -76,6 +76,17 @@ def findEncodings(images):
     return encodeList
 
 
+def recognitionInfo(course, classrom, supervisorName, date):
+    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
+    mycursor = conn.cursor()
+    cmd = """INSERT INTO suivie_examen(date, salle, examen_du_jour, superviseur) VALUES(%s, %s, %s, %s)"""
+    value = (date, classrom, course, supervisorName)
+    mycursor.execute(cmd, value)  # Execute the Commande 1
+    conn.commit()
+    print("supervisor info registered successfully in database..!")
+    conn.close()
+
+
 def RegisterStudent(ID, Name, Gender, Faculty, Department, Promotion, year, file):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
     Cursor = conn.cursor()

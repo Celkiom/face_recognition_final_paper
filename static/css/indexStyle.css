@@ -37,6 +37,12 @@ body{
     text-decoration: none;
 }
 
+.logo{
+    background-image: url("../icons/logo.png");
+    height:135px;
+    background-size: cover;
+}
+
 
  /*	CSS for welcome page * 
   *======================*/
@@ -52,7 +58,7 @@ body{
 .principalLeft{
     background-image: url("../icons/fac-bg.jpg");
 	height: 100%;					/* je dois gerer la hauteur de facon automatique */
-	width: 43%;
+	width: 50%;
 	display: flex;
 	flex-direction: column;
 	align-content: center;
@@ -66,23 +72,29 @@ body{
 	background-size: cover;
 	/*background: #d0c1d1;*/
 	height: 100%;					/* je dois gerer la hauteur de facon automatique */
-	width: 57%;
+	width: 75%;
 	border-top-left-radius: 250px;
 	border-bottom-left-radius: 250px;
 }
 
 .principalBtn{
-	margin:45px 180px;
-	margin-bottom: 20px;
-	background: #684384;	
+	margin:25px 140px;
+	background: #684384;
+	width: 200px;
 	color: white;
 	font-size: 1.3em;
-	border-radius: 10px;
+	border-radius:15px;
 	padding:6px;
+}
+
+.bg{
+	background: #617e99;
+	margin-left: 50px;
 }
 
 .principalBtn:last-child{
 	background: #3c6653;
+	margin-left: 250px;
 }
 
 .principalBtn:hover{
@@ -95,7 +107,7 @@ body{
 	background: #e4e4e4;
 	font-size: 1.5em;
 	padding: 6px 0px;
-	margin: 40px 0px 120px 75px;
+	margin: 40px 0px 100px 75px;
 }
 
 /*	CSS for student's info part * 
@@ -128,8 +140,13 @@ body{
 .registerInfo{
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: right;
 	margin-bottom: 10px;
+	margin-right: 55px;
+}
+
+.registerInfo form{
+display:flex;
 }
 
 .registerBtn{
@@ -164,6 +181,7 @@ body{
 }
 
 .recherche input{
+
 	width: 350px;
 	border: none;
 	border-radius: 0;
@@ -192,7 +210,7 @@ flex-direction: row;
 }
 
 .studentCam{
-	background-image: url("../icons/control1.png");
+	background-image: url("../icons/face1.png");
 	height: 150px;
     width: 150px;
     margin: 30px 10px 20px;
@@ -225,7 +243,7 @@ flex-direction: row;
 }
 
 .studentPic{
-	background-image: url("../icons/control1.png");
+	background-image: url("../icons/face.png");
 	height: 200px;
     width: 200px;
 	margin-right: 150px;
@@ -302,7 +320,6 @@ background-image: url("../icons/control1.png");
 }
 .startBtn{
 	margin-top: 50px;
-	margin-left:470px;
 	background: #745b9d;	
 	color: white;
 	font-size: 1.2em;
