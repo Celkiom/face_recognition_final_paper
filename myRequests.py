@@ -1,21 +1,56 @@
 # Management of requests
 # ==========================>
-from base64 import b64decode
-
-import face_recognition
-import cv2
-import os
+from base64 import b64decode  # don't remove library from line 3 to 6.
 import numpy as np
 from io import BytesIO
 from PIL import Image
 import mysql.connector
-
-path = './images'
-
+import face_recognition
+import cv2
+import os
 
 # img = 0
 # img = bytes(img)
 # name = 'nom etudiant :'
+
+
+def participationInfo():
+    absent = []
+    present = []
+    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
+    mycursor = conn.cursor()
+    cmd = "SELECT signature FROM liste_presence"
+    mycursor.execute(cmd)
+    listPresence = mycursor.fetchall()
+    conn.close()
+    for presence in listPresence:
+        if "Absent" in presence[0]:
+            absent.append(presence[0])
+        elif "Present" in presence[0]:
+            present.append(presence[0])
+    return len(absent), len(present)
+
+
+def statisticInfo():
+    fac = []
+    solde = []
+    listPresence = []
+    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
+    mycursor = conn.cursor()
+    cmd = "SELECT faculte.designation_fac, SUM(finance.solde) FROM student JOIN appartenir ON student.matricule = " \
+          "appartenir.matricule_fk  JOIN promotion ON appartenir.promotion_fk = promotion.id_prom JOIN departement ON " \
+          "promotion.departement_fk = departement.id_dep JOIN faculte ON departement.faculte_fk = faculte.id_fac JOIN " \
+          "finance ON student.matricule = finance.matricule_fk GROUP BY faculte.designation_fac "
+    mycursor.execute(cmd)
+    statistic = mycursor.fetchall()
+    for state in statistic:
+        fac.append(state[0])
+        solde.append(int(state[1]))
+    conn.close()
+    absent, present = participationInfo()
+    listPresence.append(absent)
+    listPresence.append(present)
+    return fac, solde, listPresence
 
 
 def studentInformation():

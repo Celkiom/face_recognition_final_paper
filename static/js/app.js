@@ -5,3 +5,4 @@ linkTags.forEach(link => {
         console.log('clicked')
     })
 })
+

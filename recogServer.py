@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, Response, url_for, flash
 from flask_paginate import get_page_parameter, Pagination
 import myRequests
 from camera import VideoCamera
+import json
 
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -16,6 +17,8 @@ path = './photos'
 img_path = []
 # for pagination
 limit = 5  # perPage
+rows = myRequests.studentInformation()
+total = len(rows)
 
 
 @app.route('/')
@@ -54,7 +57,7 @@ def PresenceList():
     page = request.args.get(get_page_parameter(), type=int, default=1)
     offset = page * limit - limit
     presenceList = listePresence(limit, offset)
-    pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+    pagination = Pagination(page=page, per_page=limit, total=len(presenceList), css_framework='bootstrap4')
     return render_template('listePresence.html', studentList=presenceList, pagination=pagination, page=page)
 
 
@@ -62,9 +65,9 @@ def PresenceList():
 def supervisorList():
     page = request.args.get(get_page_parameter(), type=int, default=1)
     offset = page * limit - limit
-    supevisorList = listeSuivie(limit, offset)
-    pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
-    return render_template('supervisorList.html', supervisorList=supevisorList, pagination=pagination, page=page)
+    supervisorList = listeSuivie(limit, offset)
+    pagination = Pagination(page=page, per_page=limit, total=len(supervisorList), css_framework='bootstrap4')
+    return render_template('supervisorList.html', supervisorList=supervisorList, pagination=pagination, page=page)
 
 
 @app.route('/recognition')
@@ -177,7 +180,7 @@ def search():
                          "LIMIT %s OFFSET %s", ("%" + keyWord + "%", "%" + keyWord + "%", keyWord, limit, offset))
         studentsList = mycursor.fetchall()
         conn.close()
-        pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+        pagination = Pagination(page=page, per_page=limit, total=len(studentsList), css_framework='bootstrap4')
         return render_template('studentInfo.html', student=studentsList, pagination=pagination, page=page)
 
 
@@ -188,31 +191,34 @@ def searchPresence():
     offset = page * limit - limit
     if request.method == "POST":
         keyWord = request.form['recherche']
-        # search by name or id
+        # search by signature or matricule
         conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")
         mycursor = conn.cursor()
-        mycursor.execute("SELECT * FROM liste_presence WHERE matricule_fk LIKE %s LIMIT %s OFFSET %s", ("%" + keyWord + "%", limit, offset))
+        mycursor.execute("SELECT * FROM liste_presence WHERE matricule_fk LIKE %s OR signature LIKE %s LIMIT %s "
+                         "OFFSET %s", ("%" + keyWord + "%", "%" + keyWord + "%", limit, offset))
         studentsList = mycursor.fetchall()
         conn.close()
-        pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+        pagination = Pagination(page=page, per_page=limit, total=len(studentsList), css_framework='bootstrap4')
         return render_template('listePresence.html', studentList=studentsList, pagination=pagination, page=page)
 
-    # endpoint for search in supervisor
-    @app.route('/filterSupervisor', methods=['POST', 'GET'])
-    def searchSupervisor():
-        page = request.args.get(get_page_parameter(), type=int, default=1)
-        offset = page * limit - limit
-        if request.method == "POST":
-            keyWord = request.form['recherche']
-            # search by name or id
-            conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")
-            mycursor = conn.cursor()
-            mycursor.execute("SELECT * FROM suivie_examen WHERE examen_du_jour LIKE %s OR superviseur LIKE %s LIMIT "
-                             "%s OFFSET %s", ("%" + keyWord + "%", "%" + keyWord + "%", limit, offset))
-            supevisorList = mycursor.fetchall()
-            conn.close()
-            pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
-            return render_template('listePresence.html', supevisorList=supevisorList, pagination=pagination, page=page)
+
+# endpoint for search in supervisor
+@app.route('/supervisorFilter', methods=['POST', 'GET'])
+def searchSupervisor():
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    offset = page * limit - limit
+    if request.method == "POST":
+        keyWord = request.form['recherche']
+        # search by supervisor name or examen name
+        conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")
+        mycursor = conn.cursor()
+        mycursor.execute("SELECT * FROM suivie_examen WHERE examen_du_jour LIKE %s OR salle LIKE %s OR superviseur "
+                         "LIKE %s LIMIT %s OFFSET %s", ("%" + keyWord + "%", "%" + keyWord + "%", "%" + keyWord +
+                                                        "%", limit, offset))
+        supervisorList = mycursor.fetchall()
+        conn.close()
+        pagination = Pagination(page=page, per_page=limit, total=len(supervisorList), css_framework='bootstrap4')
+        return render_template('supervisorList.html', supervisorList=supervisorList, pagination=pagination, page=page)
 
 
 def paginationInfo(lim, offs):
@@ -220,11 +226,11 @@ def paginationInfo(lim, offs):
     mycursor = conn.cursor()
     mycursor.execute("SELECT matricule, noms, genre, photo, faculte.designation_fac, departement.designation_dep, "
                      "promotion.designation_prom, appartenir.annee_academ, finance.solde, workprogram.seance, "
-                     "student.photo FROM student JOIN appartenir ON student.matricule = appartenir.matricule_fk  JOIN "
-                     "promotion ON appartenir.promotion_fk = promotion.id_prom JOIN departement ON "
-                     "promotion.departement_fk = departement.id_dep JOIN faculte ON departement.faculte_fk = "
-                     "faculte.id_fac JOIN finance ON student.matricule = finance.matricule_fk JOIN workprogram ON "
-                     "student.matricule = workprogram.matricule_fk LIMIT %s OFFSET %s", (lim, offs))
+                     "FROM student JOIN appartenir ON student.matricule = appartenir.matricule_fk  JOIN promotion ON "
+                     "appartenir.promotion_fk = promotion.id_prom JOIN departement ON promotion.departement_fk = "
+                     "departement.id_dep JOIN faculte ON departement.faculte_fk = faculte.id_fac JOIN finance ON "
+                     "student.matricule = finance.matricule_fk JOIN workprogram ON student.matricule = "
+                     "workprogram.matricule_fk LIMIT %s OFFSET %s", (lim, offs))
     studentsList = mycursor.fetchall()
     conn.close()
     return studentsList
@@ -260,6 +266,14 @@ def video_feed2():
     return Response(generator(VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
+# This router returns the graphics
+@app.route('/dashboard')
+def dashboard():
+    facultes, soldes, presenceListe = myRequests.statisticInfo()
+    return render_template('dashboard.html', facultes=json.dumps(facultes), soldes=json.dumps(soldes),
+                           presenceList=json.dumps(presenceListe))
+
+
 def gen(camer):
     while True:
         frame = camer.get_attendance()
@@ -273,6 +287,4 @@ def video_feed():
 
 
 if __name__ == '__main__':
-    rows = myRequests.studentInformation()
-    total = len(rows)
     app.run(debug=True)

@@ -374,3 +374,15 @@ background-image: url("../icons/control1.png");
 	font-size: 1.5em;
 	font-weight: 700;
 }
+
+.retour:hover{
+    border-right: 3px solid #5DA5DA;
+    color: red;
+    padding-right:5px;
+    text-decoration: none;
+    transition: .3s;
+}
+
+.margeGraph{
+    margin-top: 70px;
+}
