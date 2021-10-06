@@ -16,6 +16,9 @@
 			</div>
 			<div class="registerInfo">
 			  <!-- Button to Open the Modal -->
+				<form class="row justify-content-end m-0" action="/registerPicture" method="POST">
+					<button name="submit" type="submit" value="takePicture" class="registerBtn">Take picture</button>
+				</form>
 				<button type="button" class="registerBtn" data-toggle="modal" data-target="#myModal">Add student</button>
 				<td><button name="submit" value="edit" class="updateBtn btn btn-sm btn-warning " data-toggle="modal" data-target="#myModal2">Update Info</button></td>
 				<form class="row justify-content-end m-0" ACTION="/filterStudent" method="POST">

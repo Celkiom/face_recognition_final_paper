@@ -37,6 +37,12 @@ body{
     text-decoration: none;
 }
 
+.disconectBtn:hover{
+    background: white;
+    color: red;
+    text-decoration: none;
+}
+
 .logo{
     background-image: url("../icons/logo.png");
     height:135px;
@@ -142,7 +148,7 @@ body{
 	flex-direction: row;
 	justify-content: right;
 	margin-bottom: 10px;
-	margin-right: 55px;
+	margin-right: 65px;
 }
 
 .registerInfo form{
@@ -158,6 +164,19 @@ display:flex;
 	padding:1px 15px;
 	border: none;
 	border-radius: 25px;
+}
+
+.registerBtn:first-child{
+	background: #3c6653;
+	height: 40px;
+	width:135px;
+	color: white;
+	font-size: 1.2em;
+	padding:1px 15px;
+	border: none;
+	border-radius: 25px;
+	margin-left: 30px;
+	margin-right: 20px;
 }
 
 .registerBtn:hover{
@@ -188,7 +207,7 @@ display:flex;
 	border-bottom: 1px solid #6d727486;
 	background: transparent;
 	color: #6a568b;
-	margin-left: 250px;
+	margin-left: 180px;
 }
 
 .conteneurForm{

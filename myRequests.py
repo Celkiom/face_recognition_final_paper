@@ -12,45 +12,7 @@ import os
 # img = 0
 # img = bytes(img)
 # name = 'nom etudiant :'
-
-
-def participationInfo():
-    absent = []
-    present = []
-    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
-    mycursor = conn.cursor()
-    cmd = "SELECT signature FROM liste_presence"
-    mycursor.execute(cmd)
-    listPresence = mycursor.fetchall()
-    conn.close()
-    for presence in listPresence:
-        if "Absent" in presence[0]:
-            absent.append(presence[0])
-        elif "Present" in presence[0]:
-            present.append(presence[0])
-    return len(absent), len(present)
-
-
-def statisticInfo():
-    fac = []
-    solde = []
-    listPresence = []
-    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
-    mycursor = conn.cursor()
-    cmd = "SELECT faculte.designation_fac, SUM(finance.solde) FROM student JOIN appartenir ON student.matricule = " \
-          "appartenir.matricule_fk  JOIN promotion ON appartenir.promotion_fk = promotion.id_prom JOIN departement ON " \
-          "promotion.departement_fk = departement.id_dep JOIN faculte ON departement.faculte_fk = faculte.id_fac JOIN " \
-          "finance ON student.matricule = finance.matricule_fk GROUP BY faculte.designation_fac "
-    mycursor.execute(cmd)
-    statistic = mycursor.fetchall()
-    for state in statistic:
-        fac.append(state[0])
-        solde.append(int(state[1]))
-    conn.close()
-    absent, present = participationInfo()
-    listPresence.append(absent)
-    listPresence.append(present)
-    return fac, solde, listPresence
+path = '../UsersPhotos'
 
 
 def studentInformation():
@@ -170,6 +132,10 @@ def RegisterStudent(ID, Name, Gender, Faculty, Department, Promotion, year, file
 def deleteStudent(ID):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connection to DB
     mycursor = conn.cursor()
+    mycursor.execute("SELECT noms FROM student WHERE matricule =" + str(ID))
+    name = mycursor.fetchone()
+    nom = str(ID) + '.' + str(name[0]) + '.jpg'
+    print(' le type du nom est', type(nom))
     mycursor.execute("SELECT promotion_fk FROM appartenir WHERE matricule_fk =" + str(ID))
     idprom = mycursor.fetchone()
     mycursor.execute("SELECT departement_fk FROM promotion WHERE id_prom =" + str(idprom[0]))
@@ -178,12 +144,18 @@ def deleteStudent(ID):
     idfac = mycursor.fetchone()
     mycursor.execute("DELETE FROM workprogram WHERE matricule_fk = %s" % ID)
     mycursor.execute("DELETE FROM finance WHERE matricule_fk = %s" % ID)
+    mycursor.execute("DELETE FROM liste_presence WHERE matricule_fk = %s" % ID)
     mycursor.execute("DELETE FROM appartenir WHERE matricule_fk = %s" % ID)
     mycursor.execute("DELETE FROM promotion WHERE id_prom = %s" % idprom[0])
     mycursor.execute("DELETE FROM departement WHERE id_dep = %s" % iddep[0])
     mycursor.execute("DELETE FROM faculte WHERE id_fac = %s" % idfac[0])
     mycursor.execute("DELETE FROM student WHERE matricule = %s" % ID)
     students = conn.commit()
+    if os.path.exists('./photos/'+nom):
+        os.remove('./photos/'+nom)
+        print("picture deleted with success...")
+    else:
+        print("the picture doesn't exist...")
     conn.close()
     print("record deleted with success...")
     return students
@@ -245,6 +217,67 @@ def openDoor(idEtudiant):
     conn.commit()
     print("Information registered successfully in database..!")
     conn.close()
+
+
+# this method returns value that help produce pie graphic
+# ========================================================
+def participationInfo():
+    absent = []
+    present = []
+    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
+    mycursor = conn.cursor()
+    cmd = "SELECT signature FROM liste_presence"
+    mycursor.execute(cmd)
+    listPresence = mycursor.fetchall()
+    conn.close()
+    for presence in listPresence:
+        if "Absent" in presence[0]:
+            absent.append(presence[0])
+        elif "Present" in presence[0]:
+            present.append(presence[0])
+    return len(absent), len(present)
+
+
+# This method manager chart diagram graphic and returns value of participationInfo by returning a list of their value
+# ====================================================================================================================
+def statisticInfo():
+    fac = []
+    solde = []
+    listPresence = []
+    conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
+    mycursor = conn.cursor()
+    cmd = "SELECT faculte.designation_fac, SUM(finance.solde) FROM student JOIN appartenir ON student.matricule = " \
+          "appartenir.matricule_fk  JOIN promotion ON appartenir.promotion_fk = promotion.id_prom JOIN departement ON " \
+          "promotion.departement_fk = departement.id_dep JOIN faculte ON departement.faculte_fk = faculte.id_fac JOIN " \
+          "finance ON student.matricule = finance.matricule_fk GROUP BY faculte.designation_fac "
+    mycursor.execute(cmd)
+    statistic = mycursor.fetchall()
+    for state in statistic:
+        fac.append(state[0])
+        solde.append(int(state[1]))
+    conn.close()
+    absent, present = participationInfo()
+    listPresence.append(absent)
+    listPresence.append(present)
+    return fac, solde, listPresence
+
+
+def takePic():
+    video = cv2.VideoCapture(0)
+    while True:
+        check, frame = video.read()
+        cv2.imshow("Capturing... ", frame)
+        key = cv2.waitKey(1)
+        if key % 256 == 27:
+            cv2.destroyAllWindows()
+            break
+        elif key % 256 == 32:
+            cv2.imwrite(os.path.join(path, 'image.jpg'), frame)
+
+            cv2.destroyAllWindows()
+            break
+    cv2.destroyAllWindows()
+    video.release()
 
 # This method returns image and name from db
 # ==========================================

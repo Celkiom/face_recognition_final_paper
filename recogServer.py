@@ -1,4 +1,7 @@
 import base64
+import os
+
+import cv2
 import mysql
 from flask import Flask, render_template, request, Response, url_for, flash
 from flask_paginate import get_page_parameter, Pagination
@@ -100,8 +103,26 @@ def registerStudent():
         files = request.files["file"]
         file = files.read()
         if request.form["submit"] == "SaveInfo":
+            with open('./photos/'+str(Matricule) + '.' + Noms + '.jpg', 'wb') as q:
+                q.write(file)
+            # cv2.imwrite(os.path.join(path, str(Matricule) + '.' + Noms + '.jpg'), files)
             myRequests.RegisterStudent(Matricule, Noms, Genre, Faculte, Departement, Promotion, Annee, file)
             flash(' ' + Noms + ' was successfully added')
+
+    # Pagination management
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    offset = page * limit - limit
+    studentsList = paginationInfo(limit, offset)
+    pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+    return render_template('studentInfo.html', student=studentsList, pagination=pagination, page=page)
+
+
+@app.route("/registerPicture", methods=['POST', 'GET'])
+def registerPicture():
+    if request.method == 'POST':
+        if request.form["submit"] == "takePicture":
+            myRequests.takePic()
+            flash(' picture was successfully added')
 
     # Pagination management
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -134,7 +155,7 @@ def deleteStudent(id):
     page = request.args.get(get_page_parameter(), type=int, default=1)
     offset = page * limit - limit
     studentsList = paginationInfo(limit, offset)
-    pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+    pagination = Pagination(page=page, per_page=limit, total=len(studentsList), css_framework='bootstrap4')
     return render_template('studentInfo.html', student=studentsList, pagination=pagination, page=page)
 
 
@@ -156,7 +177,7 @@ def editStudent():
     page = request.args.get(get_page_parameter(), type=int, default=1)
     offset = page * limit - limit
     studentsList = paginationInfo(limit, offset)
-    pagination = Pagination(page=page, per_page=limit, total=total, css_framework='bootstrap4')
+    pagination = Pagination(page=page, per_page=limit, total=len(studentsList), css_framework='bootstrap4')
     return render_template('studentInfo.html', student=studentsList, pagination=pagination, page=page)
 
 
@@ -225,8 +246,8 @@ def paginationInfo(lim, offs):
     conn = mysql.connector.connect(host="localhost", database="memoire", user="root", password="")  # Connect to DB
     mycursor = conn.cursor()
     mycursor.execute("SELECT matricule, noms, genre, photo, faculte.designation_fac, departement.designation_dep, "
-                     "promotion.designation_prom, appartenir.annee_academ, finance.solde, workprogram.seance, "
-                     "FROM student JOIN appartenir ON student.matricule = appartenir.matricule_fk  JOIN promotion ON "
+                     "promotion.designation_prom, appartenir.annee_academ, finance.solde, workprogram.seance FROM "
+                     "student JOIN appartenir ON student.matricule = appartenir.matricule_fk  JOIN promotion ON "
                      "appartenir.promotion_fk = promotion.id_prom JOIN departement ON promotion.departement_fk = "
                      "departement.id_dep JOIN faculte ON departement.faculte_fk = faculte.id_fac JOIN finance ON "
                      "student.matricule = finance.matricule_fk JOIN workprogram ON student.matricule = "
@@ -254,6 +275,14 @@ def listeSuivie(lim, offs):
     return suivieInfo
 
 
+# This router returns the graphics
+@app.route('/dashboard')
+def dashboard():
+    facultes, soldes, presenceListe = myRequests.statisticInfo()
+    return render_template('dashboard.html', facultes=json.dumps(facultes), soldes=json.dumps(soldes),
+                           presenceList=json.dumps(presenceListe))
+
+
 def generator(camer):
     while True:
         frame = camer.get_recognition()
@@ -264,14 +293,6 @@ def generator(camer):
 @app.route('/stream')
 def video_feed2():
     return Response(generator(VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-# This router returns the graphics
-@app.route('/dashboard')
-def dashboard():
-    facultes, soldes, presenceListe = myRequests.statisticInfo()
-    return render_template('dashboard.html', facultes=json.dumps(facultes), soldes=json.dumps(soldes),
-                           presenceList=json.dumps(presenceListe))
 
 
 def gen(camer):
