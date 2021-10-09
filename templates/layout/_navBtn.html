@@ -2,35 +2,68 @@
 	{% block body %}
 
 <div class="leftNav">
-	<div>
+	<ul>
 		<div class="logo"></div>
-		<a href="http://127.0.0.1:5000/index" class="navBtn">
-			<i class="fa fa-home"></i>  Home
-		</a>
-		<a href="http://127.0.0.1:5000/registered" class="navBtn">
-			<i class="fa fa-users" aria-hidden="true"></i>  Student infos
-		</a>
-		<a href="http://127.0.0.1:5000/recognition" class="navBtn">
-			<i class="fa fa-video" aria-hidden="true"></i>  Authentication
-		</a>
-		<a href="http://127.0.0.1:5000/attendance" class="navBtn">
-			<i class="far fa-calendar-check" aria-hidden="true"></i>  Attendance
-		</a>
-		<a href="http://127.0.0.1:5000/presenceList" class="navBtn">
-			<i class="fas fa-clipboard-list" aria-hidden="true"></i>  Attendance list
-		</a>
-		<a href="http://127.0.0.1:5000/supervisorList" class="navBtn">
-			<i class="fas fa-id-card" aria-hidden="true"></i>  Supervisor Info
-		</a>
-		<a href="http://127.0.0.1:5000/dashboard" class="navBtn">
-			<i class="far fa-chart-bar" aria-hidden="true"></i>  Analytics
-		</a>
-	</div>
+		<li>
+			<a href="http://127.0.0.1:5000/index" class="active">
+				<i class="fa fa-home"></i>  Home
+			</a>
+		</li>
+		<li>
+			<a href="http://127.0.0.1:5000/registered">
+				<i class="fa fa-users" aria-hidden="true"></i>  Student infos
+			</a>
+		</li>
+		<li>
+			<a href="http://127.0.0.1:5000/recognition">
+				<i class="fa fa-video" aria-hidden="true"></i>  Authentication
+			</a>
+		</li>
+		<li>
+			<a href="http://127.0.0.1:5000/attendance">
+				<i class="far fa-calendar-check" aria-hidden="true"></i>  Attendance
+			</a>
+		</li>
+		<li>
+			<a href="http://127.0.0.1:5000/presenceList">
+				<i class="fas fa-clipboard-list" aria-hidden="true"></i>  Attendance list
+			</a>
+		</li>
+		<li>
+			<a href="http://127.0.0.1:5000/supervisorList" >
+				<i class="fas fa-id-card" aria-hidden="true"></i>  Supervisor Info
+			</a>
+		</li>
+		<li>
+			<a href="http://127.0.0.1:5000/dashboard" >
+				<i class="far fa-chart-bar" aria-hidden="true"></i>  Analytics
+			</a>
+		</li>
+	</ul>
 	<div>
-		<a href="http://127.0.0.1:5000/authentication" class="navBtn disconectBtn">
-			<i class="fa fa-power-off" aria-hidden="true"></i>  Log-out
-		</a>
+		<ul>
+			<li>
+				<a href="http://127.0.0.1:5000/authentication">
+					<i class="fa fa-power-off" aria-hidden="true"></i>  Log-out
+				</a>
+			</li>
+		</ul>
 	</div>
 </div>
 
+<!-- script which manager active button and maintain hover option -->
+<!-- ============================================================ -->
+	<script type="text/javascript">
+	const currentLocation = location.href;
+	const menuItem = document.querySelectorAll('a');
+	const menuLength = menuItem.length
+	for (let i = 0; i<menuLength; i++){
+		if(menuItem[i].href === currentLocation){
+			menuItem[i].className = "active"
+		}
+		else{
+			menuItem[i].className = ""
+		}
+	}
+	</script>
 	{% endblock %}

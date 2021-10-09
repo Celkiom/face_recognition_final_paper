@@ -22,7 +22,7 @@ body{
     transition: background 0.3s ease-in-out;
 }
 
-.navBtn{
+ul li a{
     display: block;
     padding: 8px;
     margin: 5px 0;
@@ -30,16 +30,18 @@ body{
     color: white;
 }
 
-.navBtn:hover,
-.navBtn.active{
-    background: white;
+ul li a:hover{
+    background:white;
     color: #617e99;
     text-decoration: none;
 }
 
-.disconectBtn:hover{
-    background: white;
-    color: red;
+ul li{
+    list-style:none;
+}
+ul li a.active {
+    background:white;
+    color: #617e99;
     text-decoration: none;
 }
 
@@ -394,14 +396,14 @@ background-image: url("../icons/control1.png");
 	font-weight: 700;
 }
 
-.retour:hover{
-    border-right: 3px solid #5DA5DA;
-    color: red;
-    padding-right:5px;
-    text-decoration: none;
-    transition: .3s;
+.margeGraph{
+    margin: 130px 10px !important;
 }
 
-.margeGraph{
-    margin-top: 70px;
+.card-body{
+    height: 350px !important;
+}
+
+.chart-container{
+    padding-top: 40px;
 }
